@@ -10,6 +10,7 @@ object ItemCFDriver {
                          startDt: String = "",
                          endDt: String = "",
                          maxClick: Int = 100,
+                         minCoClick: Int = 2,
                          topK: Int = 100
                        ) extends Serializable
 
@@ -27,6 +28,10 @@ object ItemCFDriver {
     opt[Int]("maxClick")
       .text(s"maxClick: ${defaultParam.maxClick}")
       .action((x, c) => c.copy(maxClick = x))
+
+    opt[Int]("minCoClick")
+      .text(s"minCoClick: ${defaultParam.minCoClick}")
+      .action((x, c) => c.copy(minCoClick = x))
 
     opt[Int]("topK")
       .text(s"topK: ${defaultParam.topK}")
@@ -85,6 +90,7 @@ object ItemCFDriver {
           (for {x <- items; y <- items} yield ((x, y), 1))
       }
       .reduceByKey((a, b) => a + b)
+      .filter(_._2 >= param.minCoClick) // 限制最小的共现次数
 
     val similarities = coClickNumRdd.map {
       case ((x, y), clicks) =>
