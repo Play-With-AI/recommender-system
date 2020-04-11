@@ -86,7 +86,7 @@ val similarities = coClickNumRdd.map {
       }
 ```
 
-得到物品之间的相似度后我们做一个简单的排序截断取TopK就可以作为线上的推荐的数据了。
+得到物品之间的相似度后做一个简单的排序截断最相似的$K$个物品，来作为线上的推荐的数据。
 完整的代码可以在GitHub上找到。[GitHub链接](https://github.com/Play-With-AI/recommender-system)
 
 ## 总结
